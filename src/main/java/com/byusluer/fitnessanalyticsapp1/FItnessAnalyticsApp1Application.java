@@ -58,7 +58,24 @@ public class FItnessAnalyticsApp1Application implements CommandLineRunner {
         avgDurationByType.forEach((type, avg) -> log.info("   → \t{} : {} hours", type, NumberFormatter.formatDouble(avg)));
 
 
+        Map<String, Long> mostFrequent = analyticsService.getMostFrequentWo(sessions);
+        mostFrequent.forEach((type, count) ->
+                log.info("🔥 [8] Most frequent workout → \t{} : {} times", type, count));
 
+
+        Map<Integer, Long> frequencyMap = analyticsService.getWorkOutFrequency(sessions);
+        frequencyMap.forEach((freq, count) ->
+                log.info("🔥 [9] Workout frequency → \t{} : {} sessions", freq, count));
+
+        Map<String, Double> maxDurationMap = analyticsService.getWorkoutTypeWithMaxTotalDuration(sessions);
+        maxDurationMap.forEach((type, duration) ->
+                log.info("🔥 [10] Max total duration → \t{} : {} hours", type, NumberFormatter.formatDouble(duration))
+        );
+
+        Map<String, Double> longestSession = analyticsService.getLongestWoSession(sessions);
+        longestSession.forEach((type, duration) ->
+                log.info("🔥 [11] Longest workout session → \t{} : {} hours", type, NumberFormatter.formatDouble(duration))
+        );
     }
 
 }
