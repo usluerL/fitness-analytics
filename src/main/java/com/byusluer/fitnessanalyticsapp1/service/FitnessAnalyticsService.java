@@ -144,5 +144,55 @@ public class FitnessAnalyticsService {
 
     }
 
+    // [12] Total water intake by workout type
+
+    public Map<String, Double> getTotalWaterIntakeByWoType(List<ActivitySession> sessions) {
+
+        Map<String, Double> intakeMap = sessions.stream()
+                .filter(s -> s.getWaterIntakeLiters() != null && s.getWorkoutType() != null)
+                .collect(Collectors.groupingBy(ActivitySession::getWorkoutType, Collectors.summingDouble(ActivitySession::getWaterIntakeLiters)));
+
+        return intakeMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new));
+    }
+
+    //  [13] Total calories burned by gender
+
+    public Map<String, Double> getTotalCaloriesByGender(List<ActivitySession> sessions) {
+
+        return sessions.stream()
+                .filter(s -> s.getCaloriesBurned() != null && s.getGender() != null)
+                .collect(Collectors.groupingBy(ActivitySession::getGender, Collectors.summingDouble(ActivitySession::getCaloriesBurned)));
+
+    }
+
+    // [14] Average fat percentage by experience level
+
+    public Map<Double, Double> getAverageFatPercentageByExperience(List<ActivitySession> sessions) {
+
+        return sessions.stream().filter(s -> s.getFatPercentage() != null
+                        && s.getExperienceLevel() != null)
+                .collect(Collectors.groupingBy(ActivitySession::getExperienceLevel, Collectors.averagingDouble(ActivitySession::getFatPercentage)));
+
+
+    }
+
+    // [15] Calculate average BMI by workout type
+
+
+    public Map<String, Double> getAverageBMIbyWoType(List<ActivitySession> sessions) {
+
+        return sessions.stream()
+                .filter(s -> s.getBmi() != null
+                        && s.getWorkoutType() != null)
+                .collect(Collectors.groupingBy(ActivitySession::getWorkoutType, Collectors.averagingDouble(ActivitySession::getBmi)));
+
+
+    }
 
 }

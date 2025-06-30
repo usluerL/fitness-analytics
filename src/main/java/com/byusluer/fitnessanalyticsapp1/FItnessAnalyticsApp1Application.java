@@ -76,6 +76,28 @@ public class FItnessAnalyticsApp1Application implements CommandLineRunner {
         longestSession.forEach((type, duration) ->
                 log.info("🔥 [11] Longest workout session → \t{} : {} hours", type, NumberFormatter.formatDouble(duration))
         );
+
+        Map<String, Double> waterMap = analyticsService.getTotalWaterIntakeByWoType(sessions);
+        waterMap.forEach((type, total) ->
+                log.info("🔥 [12] Total water intake → \t{} : {} liters", type, NumberFormatter.formatDouble(total))
+        );
+
+        analyticsService.getTotalCaloriesByGender(sessions)
+                .forEach((gender, calories) ->
+                        log.info("🔥 [13] Calories burned by gender → \t{} : {} kcal", gender, calories));
+
+        analyticsService.getAverageFatPercentageByExperience(sessions)
+                .forEach((level, avgFat) ->
+                        log.info("🔥 [14] Avg fat percentage by experience → \tLevel {} : {}%",
+                                NumberFormatter.formatDouble(level),
+                                NumberFormatter.formatDouble(avgFat)));
+
+        analyticsService.getAverageBMIbyWoType(sessions)
+                .forEach((type, avgBmi) ->
+                        log.info("🔥 [15] Avg BMI by workout type → \t{} : {}",
+                                type, NumberFormatter.formatDouble(avgBmi)));
     }
+
+
 
 }
