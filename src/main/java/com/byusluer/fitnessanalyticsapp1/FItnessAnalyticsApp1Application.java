@@ -45,7 +45,7 @@ public class FItnessAnalyticsApp1Application implements CommandLineRunner {
 
         log.info("🔥 → [4] Top 5 Most Frequent Workout Types:");
         analyticsService.getTopWoTypes(sessions)
-                .forEach(type -> log.info("\t• " + type));
+                .forEach(type -> log.info("\t• {}", type));
 
         Double hours = analyticsService.calculateTotalWoDuration(sessions);
         log.info("🔥 [5] Total workout duration:: {} hours", NumberFormatter.formatDouble(hours));
@@ -96,8 +96,27 @@ public class FItnessAnalyticsApp1Application implements CommandLineRunner {
                 .forEach((type, avgBmi) ->
                         log.info("🔥 [15] Avg BMI by workout type → \t{} : {}",
                                 type, NumberFormatter.formatDouble(avgBmi)));
-    }
 
+        Long over500 = analyticsService.getCaloriesBurned(sessions);
+        log.info("🔥 [16] Sessions burning > 500 kcal: {}", over500);
+
+        Map<Double, Long> expLevelMap = analyticsService.getExperienceLevelPerSession(sessions);
+        log.info("🔥 [16] Session count per experience level:");
+        expLevelMap.forEach((level, count) ->
+                log.info("   → Level {} : {} sessions", level, count));
+
+        Map<Double, ActivitySession> maxDurPEx = analyticsService.getMaxDurationPerExpLevel(sessions);
+
+        maxDurPEx.forEach((level, session) -> {
+            String workoutType = session.getWorkoutType();
+            Double sessionDurationHours = session.getSessionDurationHours();
+
+            log.info("   → Level {} → {} hrs ({})", level, sessionDurationHours, workoutType);
+
+
+        });
+
+    }
 
 
 }

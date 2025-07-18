@@ -195,4 +195,32 @@ public class FitnessAnalyticsService {
 
     }
 
+
+    // How many activity sessions burned more than 500 calories?
+
+    public Long getCaloriesBurned(List<ActivitySession> sessions) {
+
+        return sessions.stream().filter(s -> s.getCaloriesBurned() != null && s.getCaloriesBurned() > 500).count();
+
+    }
+
+    public Map<Double, Long> getExperienceLevelPerSession(List<ActivitySession> sessions) {
+
+        return sessions.stream().filter(s -> s.getExperienceLevel() != null)
+                .collect(Collectors.groupingBy(ActivitySession::getExperienceLevel,
+                        Collectors.counting()
+                ));
+
+    }
+
+   // For each experience level, find the session with the longest duration.
+
+    public Map<Double, ActivitySession> getMaxDurationPerExpLevel(List<ActivitySession> sessions){
+
+        return sessions.stream().filter(s->s.getExperienceLevel()!=null && s.getSessionDurationHours()!=null)
+                .collect(Collectors.groupingBy(ActivitySession::getExperienceLevel,
+                        Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(ActivitySession::getSessionDurationHours))
+                        , optional -> optional.orElse(null))));
+    }
+
 }
