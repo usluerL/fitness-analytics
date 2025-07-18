@@ -103,7 +103,7 @@ public class FItnessAnalyticsApp1Application implements CommandLineRunner {
         Map<Double, Long> expLevelMap = analyticsService.getExperienceLevelPerSession(sessions);
         log.info("🔥 [16] Session count per experience level:");
         expLevelMap.forEach((level, count) ->
-                log.info("   → Level {} : {} sessions", level, count));
+                log.info("   → Level  {} : {} sessions", level, count));
 
         Map<Double, ActivitySession> maxDurPEx = analyticsService.getMaxDurationPerExpLevel(sessions);
 
